@@ -21,7 +21,7 @@ exports.create = (req, res) => {
     demo
       .save(demo)
       .then(data => {
-        res.send(data);
+        res.status(201).send(data);
       })
       .catch(err => {
         res.status(500).send({
@@ -38,7 +38,7 @@ exports.findAll = (req, res) => {
   
     Demo.find(condition)
       .then(data => {
-        res.send(data);
+        res.status(200).send(data);
       })
       .catch(err => {
         res.status(500).send({
@@ -48,44 +48,44 @@ exports.findAll = (req, res) => {
       });
   };
 
-// Find a single Tutorial with an id
+// Find a single Demo with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
   
-    Tutorial.findById(id)
+    Demo.findById(id)
       .then(data => {
         if (!data)
-          res.status(404).send({ message: "Not found Tutorial with id " + id });
+          res.status(404).send({ message: "Not found demo with id " + id });
         else res.send(data);
       })
       .catch(err => {
         res
           .status(500)
-          .send({ message: "Error retrieving Tutorial with id=" + id });
+          .send({ message: "Error retrieving Demo with id=" + id });
       });
   };
 
-// Update a Tutorial by the id in the request
+// Update a Demo by the id in the request
 exports.update = (req, res) => {
-    if (!req.body) {
-      return res.status(400).send({
-        message: "Data to update can not be empty!"
-      });
+    // Validate request
+    if ((!req.body.oficialName) || (!req.body.country) || (!req.body.referenceDemo)) {
+      res.status(400).send({ message: "Body can not be empty!" });
+      return;
     }
-  
+
     const id = req.params.id;
   
-    Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    Demo.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
       .then(data => {
         if (!data) {
           res.status(404).send({
-            message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
+            message: `Cannot update Demo with id=${id}. Maybe Demo was not found!`
           });
-        } else res.send({ message: "Tutorial was updated successfully." });
+        } else res.status(200).send({ message: "Demo was updated successfully." });
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Tutorial with id=" + id
+          message: "Error updating Demo with id=" + id
         });
       });
   };
@@ -94,35 +94,21 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
   
-    Tutorial.findByIdAndDelete(id)
+    Demo.findByIdAndDelete(id)
       .then(data => {
         if (!data) {
           res.status(404).send({
-            message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+            message: `Cannot delete Demo with id=${id}. Maybe Demo was not found!`
           });
         } else {
-          res.send({
-            message: "Tutorial was deleted successfully!"
+          res.status(200).send({
+            message: "Demo was deleted successfully!"
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Tutorial with id=" + id
-        });
-      });
-  };
-
-// Find all published Tutorials
-exports.findAllPublished = (req, res) => {
-    Tutorial.find({ published: true })
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
+          message: "Could not delete Demo with id=" + id
         });
       });
   };
