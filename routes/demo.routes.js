@@ -9,16 +9,13 @@ module.exports = app => {
     // Retrieve all Demo's
     router.get("/", demos.findAll);
   
-    // // Retrieve all published Tutorials
-    // router.get("/published", tutorials.findAllPublished);
-  
     // Retrieve a single Demo with id
     router.get("/:id", demos.findOne);
   
     // Update a Demo with id
     router.put("/:id", demos.update);
   
-    // Delete a Tutorial with id
+    // Delete a Demo with id
     router.delete("/:id", demos.delete);
 
     app.use('/api/demo', router);

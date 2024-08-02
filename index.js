@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Its alive." });
 });
 
-require("./routes/tutorial.routes")(app);
+require("./routes/demo.routes")(app);
 
 
 // set port, listen for requests
