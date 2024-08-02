@@ -1,48 +1,49 @@
 const db = require("../models");
-const Tutorial = db.tutorials;
+const Demo = db.demo;
 
 // Create 
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.title) {
+    if ((!req.body.oficialName) || (!req.body.country) || (!req.body.referenceDemo)) {
       res.status(400).send({ message: "Content can not be empty!" });
       return;
     }
   
-    // Create a Tutorial
-    const tutorial = new Tutorial({
-      title: req.body.title,
-      description: req.body.description,
-      published: req.body.published ? req.body.published : false
+    // Create a demo
+    const demo = new Demo({
+      oficialName: req.body.oficialName,
+      country: req.body.country,
+      referenceDemo: req.body.referenceDemo,
+      urlPage: req.body.urlPage ? req.body.urlPage : 'No page'
     });
   
-    // Save Tutorial in the database
-    tutorial
-      .save(tutorial)
+    // Save Demo in the database
+    demo
+      .save(demo)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the Tutorial."
+            err.message || "Some error occurred while creating the Demo."
         });
       });
   };
 
-// Retrieve all Tutorials from the database.
+// Retrieve all Demo's from the database.
 exports.findAll = (req, res) => {
-    const title = req.query.title;
-    var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+    const oficialName = req.query.oficialName;
+    var condition = oficialName ? { oficialName: { $regex: new RegExp(oficialName), $options: "i" } } : {};
   
-    Tutorial.find(condition)
+    Demo.find(condition)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving tutorials."
+            err.message || "Some error occurred while retrieving demos."
         });
       });
   };
