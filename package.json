@@ -4,6 +4,7 @@
   "description": "This is a project with the objective of facilitating the demos that are made within Bemycar's company.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

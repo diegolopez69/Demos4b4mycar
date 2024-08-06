@@ -1,14 +1,10 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+import express from 'express';
+import bodyParser from 'bodyParser';
+import cors from 'cors';
 
 const app = express();
 
-var corsOptions = {
-  origin: "http://localhost:8081",
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -35,7 +31,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Its alive." });
 });
 
-require("./routes/demo.routes")(app);
+require("./demo/routes")(app);
 
 
 // set port, listen for requests

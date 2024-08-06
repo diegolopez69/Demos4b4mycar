@@ -1,38 +1,37 @@
-const db = require("../models");
-const Demo = db.demo;
+import Demo from './model.js'
 
 // Create 
-exports.create = (req, res) => {
+export const createDemo = async (req, res) => {
     // Validate request
-    if ((!req.body.oficialName) || (!req.body.country) || (!req.body.referenceDemo)) {
+    const {oficialName, country, referenceDemo, urlPage, question} = req.body 
+    if ((!oficialName) || (!country) || (!referenceDemo)) {
       res.status(400).send({ message: "Content can not be empty!" });
       return;
     }
   
     // Create a demo
     const demo = new Demo({
-      oficialName: req.body.oficialName,
-      country: req.body.country,
-      referenceDemo: req.body.referenceDemo,
-      urlPage: req.body.urlPage ? req.body.urlPage : 'No page'
+      oficialName: oficialName,
+      country: country,
+      referenceDemo: referenceDemo,
+      urlPage: urlPage ? urlPage : 'No page',
+      question: question
     });
   
     // Save Demo in the database
-    demo
-      .save(demo)
-      .then(data => {
-        res.status(201).send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the Demo."
-        });
+    try{
+      const result = await demo.save()
+      res.status(201).json({result: result, data: {oficialName, country, referenceDemo, urlPage, question}});
+    }catch(error){
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Demo."
       });
+    }
   };
 
 // Retrieve all Demo's from the database.
-exports.findAll = (req, res) => {
+export const findAllDemo = (req, res) => {
     const oficialName = req.query.oficialName;
     var condition = oficialName ? { oficialName: { $regex: new RegExp(oficialName), $options: "i" } } : {};
   
@@ -49,7 +48,7 @@ exports.findAll = (req, res) => {
   };
 
 // Find a single Demo with an id
-exports.findOne = (req, res) => {
+export const findOneDemo = (req, res) => {
     const id = req.params.id;
   
     Demo.findById(id)
@@ -66,7 +65,7 @@ exports.findOne = (req, res) => {
   };
 
 // Update a Demo by the id in the request
-exports.update = (req, res) => {
+export const updateDemo = (req, res) => {
     // Validate request
     if ((!req.body.oficialName) || (!req.body.country) || (!req.body.referenceDemo)) {
       res.status(400).send({ message: "Body can not be empty!" });
@@ -91,7 +90,7 @@ exports.update = (req, res) => {
   };
 
 // Delete a Demo with the specified id in the request
-exports.delete = (req, res) => {
+export const deleteDemo = (req, res) => {
     const id = req.params.id;
   
     Demo.findByIdAndDelete(id)
