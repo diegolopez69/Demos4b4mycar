@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createDemo, updateDemo, findAllDemo, findOneDemo, deleteDemo } from "./controller";
+import { createDemo, updateDemo, findAllDemo, findOneDemo, deleteDemo } from "./controller.js";
 
 const router = Router()
 const demoRouter = (app) => {
@@ -18,7 +18,7 @@ router.put("/:id", updateDemo);
 // Delete a Demo with id
 router.delete("/:id", deleteDemo);
 
-app.use("/api/demo", router);
+app.use("/demo", router);
 }
 
 export default demoRouter;

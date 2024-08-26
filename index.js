@@ -1,8 +1,13 @@
 import express from 'express';
-import bodyParser from 'bodyParser';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 import cors from 'cors';
+import demoRouter from './demo/routes.js';
+import mongoose from 'mongoose';
 
 const app = express();
+
+dotenv.config();
 
 app.use(cors());
 
@@ -12,26 +17,30 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const db = require("./models");
-db.mongoose
-  .connect(db.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+
+//db
+const MONGODB_URI = process.env.MONGODB_URI
+
+if(MONGODB_URI){
+  mongoose.connect(MONGODB_URI)
+  .then(()=>{
+
   })
-  .then(() => {
-    console.log("Connected to the database!");
+  .catch(error=>{
+    console.log("Configuración incorrecta.")
+  process.exit(-1)
   })
-  .catch(err => {
-    console.log("Cannot connect to the database!", err);
-    process.exit();
-  });
+}else{
+  console.log("Falta configuraciones para conectar.")
+  process.exit(-1)
+}
 
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Its alive." });
 });
 
-require("./demo/routes")(app);
+demoRouter(app)
 
 
 // set port, listen for requests

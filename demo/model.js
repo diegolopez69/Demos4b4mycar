@@ -6,7 +6,7 @@ const DemoSchema = new Schema(
     country: String,
     referenceDemo: String,
     urlPage: String,
-    Question: Object
+    question: Object
   },
   { timestamps: true }
 )

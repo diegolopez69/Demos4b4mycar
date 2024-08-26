@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This is a project with the objective of facilitating the demos that are made within Bemycar's company.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +14,7 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongoose": "^8.5.2"
   }
