@@ -1,24 +1,19 @@
+import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
-import cors from 'cors';
 import demoRouter from './demo/routes.js';
+import userRouter from './user/routes.js';
 import mongoose from 'mongoose';
+dotenv.config();
 
 const app = express();
 
-dotenv.config();
-
 app.use(cors());
 
-// parse requests of content-type - application/json
-app.use(bodyParser.json());
-
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
+demoRouter(app)
+userRouter(app)
 //db
+
 const MONGODB_URI = process.env.MONGODB_URI
 
 if(MONGODB_URI){
@@ -40,11 +35,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Its alive." });
 });
 
-demoRouter(app)
-
-
 // set port, listen for requests
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
